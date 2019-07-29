@@ -5,6 +5,8 @@ import com.da.common.model.json.MetaDataJSON;
 import com.da.common.model.json.PricingInformationJSON;
 import com.da.common.model.json.ProductDescriptionJSON;
 import com.da.common.model.json.ProductJSON;
+import com.da.wapi.exception.EmptyFieldError;
+import com.da.wapi.exception.WrongIdFormatError;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +47,7 @@ public class ProductControllerTest {
         ProductDescriptionJSON productDescriptionJSON = new ProductDescriptionJSON("title","subtitle",
                 "text");
 
-        return new ProductJSON("1","name","model","product_type",metaDataJSON,
+        return new ProductJSON(null,"name","model","product_type",metaDataJSON,
                 pricingInformationJSON, productDescriptionJSON);
     }
 
@@ -76,6 +78,18 @@ public class ProductControllerTest {
         System.out.println(entity.getBody());
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
+
+    @Test
+    public void getValidationError ()throws Exception{
+        ProductJSON product = fakeRequest();
+        product.setId("WRONG");
+        ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, product, String.class);
+        System.out.println(entity.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
+        String exp = "{\"message\":\"Id is not UUID format\",\"statusCode\":400,\"errorMessageCode\":\"E005\"}";
+        assertEquals(exp, entity.getBody());
+    }
+
     @Ignore
     @Test
     public void negativePrice() throws Exception{

@@ -1,7 +1,6 @@
 package com.da.wapi.configuration;
 
-import com.da.wapi.exception.AuthenticationError;
-import com.da.wapi.exception.QueueError;
+import com.da.wapi.exception.*;
 import com.da.wapi.model.ErrorJSON;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,4 +30,28 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, errorJSON,
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
+
+    @ExceptionHandler(value = EmptyFieldError.class)
+    protected ResponseEntity<Object> requestWithEmptyFields(EmptyFieldError ex,  WebRequest request){
+        ErrorJSON errorJSON = new ErrorJSON(ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), "E003");
+        return handleExceptionInternal(ex, errorJSON,
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+    @ExceptionHandler(value = PriceIsZeroOrNegativeError.class)
+    protected ResponseEntity<Object> requestWithPriceZeroOrNegative(PriceIsZeroOrNegativeError ex,  WebRequest request){
+        ErrorJSON errorJSON = new ErrorJSON(ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), "E004");
+        return handleExceptionInternal(ex, errorJSON,
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+    @ExceptionHandler(value = WrongIdFormatError.class)
+    protected ResponseEntity<Object> requestWithWrongIdFormat(WrongIdFormatError ex,  WebRequest request){
+        ErrorJSON errorJSON = new ErrorJSON(ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), "E005");
+        return handleExceptionInternal(ex, errorJSON,
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+
 }

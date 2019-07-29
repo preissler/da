@@ -5,6 +5,7 @@ import com.da.wapi.exception.QueueError;
 
 import com.da.wapi.model.ProductUpdateResultJSON;
 import com.da.wapi.queue.Producer;
+import com.da.wapi.validation.RequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,12 @@ public class ProductController {
 
     @Autowired
     private Producer producer;
+    @Autowired
+    private RequestValidator requestValidator;
 
     @PostMapping(path="/api/v1/update")
     public ProductUpdateResultJSON update(@RequestBody ProductJSON product){
-       //TODO define the security
-        //1 validate the quest
-
+        requestValidator.validateEmptyFields(product);
         try {
             producer.produce(product);
         } catch (Exception e) {
