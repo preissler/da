@@ -1,6 +1,5 @@
 package com.da.persistance.model.db;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +14,9 @@ public class ProductDescription {
     private String title;
     private String subtitle;
     private String text;
+
+    public ProductDescription() {
+    }
 
     public ProductDescription(String title, String subtitle, String text) {
         this.title = title;
@@ -36,5 +38,17 @@ public class ProductDescription {
 
     public String getText() {
         return text;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

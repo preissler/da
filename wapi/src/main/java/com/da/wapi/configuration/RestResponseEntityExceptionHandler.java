@@ -1,5 +1,7 @@
 package com.da.wapi.configuration;
 
+import com.da.wapi.exception.AuthenticationError;
+import com.da.wapi.exception.QueueError;
 import com.da.wapi.model.ErrorJSON;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,5 +23,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
         return handleExceptionInternal(ex, errorJSON,
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
+    @ExceptionHandler(value = QueueError.class)
+    protected ResponseEntity<Object> errorQueueing(QueueError ex, WebRequest request){
+        ErrorJSON errorJSON = new ErrorJSON("Internal Error",
+                HttpStatus.INTERNAL_SERVER_ERROR.value(), "E002");
+        return handleExceptionInternal(ex, errorJSON,
+                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 }

@@ -1,9 +1,10 @@
 package com.da.wapi.controller;
 
-import com.da.wapi.model.MetaDataJSON;
-import com.da.wapi.model.PricingInformationJSON;
-import com.da.wapi.model.ProductDescriptionJSON;
-import com.da.wapi.model.ProductJSON;
+
+import com.da.common.model.json.MetaDataJSON;
+import com.da.common.model.json.PricingInformationJSON;
+import com.da.common.model.json.ProductDescriptionJSON;
+import com.da.common.model.json.ProductJSON;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,5 +1,7 @@
 package com.da.persistance.model.db;
 
+
+
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -17,6 +19,9 @@ public class Product {
     private PricingInformation pricing_information;
     @OneToOne
     private ProductDescription product_description;
+
+    public Product() {
+    }
 
     public Product(String name, String model_number, String product_type, MetaData metaData, PricingInformation pricing_information, ProductDescription product_description) {
         this.name = name;
@@ -53,5 +58,29 @@ public class Product {
 
     public ProductDescription getProduct_description() {
         return product_description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setModel_number(String model_number) {
+        this.model_number = model_number;
+    }
+
+    public void setProduct_type(String product_type) {
+        this.product_type = product_type;
+    }
+
+    public void setMetaData(MetaData metaData) {
+        this.metaData = metaData;
+    }
+
+    public void setPricing_information(PricingInformation pricing_information) {
+        this.pricing_information = pricing_information;
+    }
+
+    public void setProduct_description(ProductDescription product_description) {
+        this.product_description = product_description;
     }
 }

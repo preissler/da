@@ -17,6 +17,9 @@ public class MetaData {
     private String keywords;
     private String canonical;
 
+    public MetaData() {
+    }
+
     public MetaData(String page_title, String site_name, String description, String keywords, String canonical) {
         this.page_title = page_title;
         this.site_name = site_name;
@@ -47,5 +50,25 @@ public class MetaData {
 
     public String getCanonical() {
         return canonical;
+    }
+
+    public void setPage_title(String page_title) {
+        this.page_title = page_title;
+    }
+
+    public void setSite_name(String site_name) {
+        this.site_name = site_name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
+    public void setCanonical(String canonical) {
+        this.canonical = canonical;
     }
 }

@@ -16,6 +16,9 @@ public class PricingInformation {
     private BigDecimal standard_price_no_vat;
     private BigDecimal currentPrice;
 
+    public PricingInformation() {
+    }
+
     public PricingInformation(BigDecimal standard_price, BigDecimal standard_price_no_vat, BigDecimal currentPrice) {
         this.standard_price = standard_price;
         this.standard_price_no_vat = standard_price_no_vat;
@@ -36,5 +39,17 @@ public class PricingInformation {
 
     public BigDecimal getCurrentPrice() {
         return currentPrice;
+    }
+
+    public void setStandard_price(BigDecimal standard_price) {
+        this.standard_price = standard_price;
+    }
+
+    public void setStandard_price_no_vat(BigDecimal standard_price_no_vat) {
+        this.standard_price_no_vat = standard_price_no_vat;
+    }
+
+    public void setCurrentPrice(BigDecimal currentPrice) {
+        this.currentPrice = currentPrice;
     }
 }
