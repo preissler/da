@@ -10,8 +10,12 @@ import com.da.wapi.exception.WrongIdFormatError;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
@@ -37,6 +41,11 @@ public class ProductControllerTest {
     public TestRestTemplate restTemplate;
     String productUpdateURL = "/api/v1/update";
 
+   @MockBean
+   RabbitAdmin rabbitAdmin;
+   @MockBean
+   RabbitTemplate rabbitTemplate;
+
 
 
     private ProductJSON fakeRequest(){
@@ -59,7 +68,7 @@ public class ProductControllerTest {
         ProductDescriptionJSON productDescriptionJSON = new ProductDescriptionJSON("title","subtitle",
                 "text");
 
-        return new ProductJSON("1","name","model","product_type",metaDataJSON,
+        return new ProductJSON(null,"name","model","product_type",metaDataJSON,
                 pricingInformationJSON, productDescriptionJSON);
     }
     @Ignore
@@ -84,19 +93,19 @@ public class ProductControllerTest {
         ProductJSON product = fakeRequest();
         product.setId("WRONG");
         ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, product, String.class);
-        System.out.println(entity.getBody());
         assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
         String exp = "{\"message\":\"Id is not UUID format\",\"statusCode\":400,\"errorMessageCode\":\"E005\"}";
         assertEquals(exp, entity.getBody());
     }
 
-    @Ignore
+
     @Test
     public void negativePrice() throws Exception{
         ProductJSON product = fakeRequestNegative();
         ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, product, String.class);
-        System.out.println(entity.getBody());
         assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
+        String exp = "{\"message\":\"Standard Price No Vat is Negative\",\"statusCode\":400,\"errorMessageCode\":\"E004\"}";
+        assertEquals(exp, entity.getBody());
     }
 
 }
