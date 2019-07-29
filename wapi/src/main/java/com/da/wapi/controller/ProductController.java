@@ -26,7 +26,7 @@ public class ProductController {
 
     @PostMapping(path="/api/v1/update")
     public ProductUpdateResultJSON update(@RequestBody ProductJSON product){
-        requestValidator.validateEmptyFields(product);
+        requestValidator.validateFields(product);
         try {
             producer.produce(product);
         } catch (Exception e) {

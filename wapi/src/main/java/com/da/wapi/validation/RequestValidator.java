@@ -55,7 +55,7 @@ public class RequestValidator {
 
     }
 
-    public void validateEmptyFields(ProductJSON product){
+    public void validateFields(ProductJSON product){
         if(product == null){
             log.error("Product is null");
             throw new EmptyFieldError("Product is null");
