@@ -9,6 +9,7 @@ import com.da.wapi.validation.RequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ public class ProductController {
     private RequestValidator requestValidator;
 
     @PostMapping(path="/api/v1/update")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ProductUpdateResultJSON update(@RequestBody ProductJSON product){
         requestValidator.validateFields(product);
         try {
