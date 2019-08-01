@@ -5,12 +5,9 @@ import com.da.common.model.json.MetaDataJSON;
 import com.da.common.model.json.PricingInformationJSON;
 import com.da.common.model.json.ProductDescriptionJSON;
 import com.da.common.model.json.ProductJSON;
-import com.da.wapi.exception.EmptyFieldError;
-import com.da.wapi.exception.WrongIdFormatError;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +15,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit.jupiter.DisabledIf;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -56,7 +49,7 @@ public class ProductControllerTest {
         ProductDescriptionJSON productDescriptionJSON = new ProductDescriptionJSON("title","subtitle",
                 "text");
 
-        return new ProductJSON(null,"name","model","product_type",metaDataJSON,
+        return new ProductJSON("ADc","name","model","product_type",metaDataJSON,
                 pricingInformationJSON, productDescriptionJSON);
     }
 
@@ -68,7 +61,7 @@ public class ProductControllerTest {
         ProductDescriptionJSON productDescriptionJSON = new ProductDescriptionJSON("title","subtitle",
                 "text");
 
-        return new ProductJSON(null,"name","model","product_type",metaDataJSON,
+        return new ProductJSON("ABC","name","model","product_type",metaDataJSON,
                 pricingInformationJSON, productDescriptionJSON);
     }
     @Ignore
@@ -91,10 +84,10 @@ public class ProductControllerTest {
     @Test
     public void getValidationError ()throws Exception{
         ProductJSON product = fakeRequest();
-        product.setId("WRONG");
+        product.setId(null);
         ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, product, String.class);
         assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-        String exp = "{\"message\":\"Id is not UUID format\",\"statusCode\":400,\"errorMessageCode\":\"E005\"}";
+        String exp = "{\"message\":\"Product ID is null\",\"statusCode\":400,\"errorMessageCode\":\"E003\"}";
         assertEquals(exp, entity.getBody());
     }
 

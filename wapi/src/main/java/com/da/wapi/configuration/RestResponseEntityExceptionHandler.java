@@ -45,13 +45,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, errorJSON,
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
-    @ExceptionHandler(value = WrongIdFormatError.class)
-    protected ResponseEntity<Object> requestWithWrongIdFormat(WrongIdFormatError ex,  WebRequest request){
-        ErrorJSON errorJSON = new ErrorJSON(ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), "E005");
-        return handleExceptionInternal(ex, errorJSON,
-                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
 
 
 }

@@ -4,13 +4,11 @@ import com.da.common.model.json.PricingInformationJSON;
 import com.da.common.model.json.ProductJSON;
 import com.da.wapi.exception.EmptyFieldError;
 import com.da.wapi.exception.PriceIsZeroOrNegativeError;
-import com.da.wapi.exception.WrongIdFormatError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Component
 public class RequestValidator {
@@ -45,12 +43,8 @@ public class RequestValidator {
     }
 
     protected void validateID(ProductJSON product){
-        if(product !=null && (product.getId()!= null && !product.getId().isEmpty())){
-            try{
-                UUID.fromString(product.getId());
-            }catch (Exception ex){
-                throw new WrongIdFormatError("Id is not UUID format");
-            }
+        if(product.getId()== null){
+            throw new EmptyFieldError("Product ID is null");
         }
 
     }
