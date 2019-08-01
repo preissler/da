@@ -1,31 +1,28 @@
-package com.da.persistance.model.db;
+package com.da.persistance.common.model.db;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Entity
 public class PricingInformation {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private UUID id;
+    private String id;
     private BigDecimal standard_price;
     private BigDecimal standard_price_no_vat;
     private BigDecimal currentPrice;
 
-    public PricingInformation() {
-    }
-
-    public PricingInformation(BigDecimal standard_price, BigDecimal standard_price_no_vat, BigDecimal currentPrice) {
+    public PricingInformation(String id,BigDecimal standard_price, BigDecimal standard_price_no_vat, BigDecimal currentPrice) {
+        this.id=id;
         this.standard_price = standard_price;
         this.standard_price_no_vat = standard_price_no_vat;
         this.currentPrice = currentPrice;
     }
 
-    public UUID getId() {
+    public PricingInformation() {
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -39,6 +36,10 @@ public class PricingInformation {
 
     public BigDecimal getCurrentPrice() {
         return currentPrice;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setStandard_price(BigDecimal standard_price) {

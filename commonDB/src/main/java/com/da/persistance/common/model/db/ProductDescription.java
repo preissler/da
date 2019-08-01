@@ -1,30 +1,28 @@
-package com.da.persistance.model.db;
+package com.da.persistance.common.model.db;
+
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.UUID;
 
 @Entity
 public class ProductDescription {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private UUID id;
+    private String id;
     private String title;
     private String subtitle;
     private String text;
 
-    public ProductDescription() {
-    }
-
-    public ProductDescription(String title, String subtitle, String text) {
+    public ProductDescription(String id ,String title, String subtitle, String text) {
+        this.id=id;
         this.title = title;
         this.subtitle = subtitle;
         this.text = text;
     }
 
-    public UUID getId() {
+    public ProductDescription() {
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -38,6 +36,10 @@ public class ProductDescription {
 
     public String getText() {
         return text;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setTitle(String title) {

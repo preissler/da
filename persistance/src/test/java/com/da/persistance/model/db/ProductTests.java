@@ -3,7 +3,11 @@ package com.da.persistance.model.db;
 
 
 
-import com.da.persistance.repository.ProductRepository;
+import com.da.persistance.common.model.db.MetaData;
+import com.da.persistance.common.model.db.PricingInformation;
+import com.da.persistance.common.model.db.Product;
+import com.da.persistance.common.model.db.ProductDescription;
+import com.da.persistance.common.repository.ProductRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,11 +28,11 @@ public class ProductTests {
 
     @Test
     public void testInitial()throws Exception{
-        MetaData metaData = new MetaData("page_title","site name","description","keywords", "//canonical//");
-        PricingInformation pricingInformation = new PricingInformation(new BigDecimal("20.00"),new BigDecimal("10.00"), new BigDecimal("20.00") );
-        ProductDescription productDescription = new ProductDescription("title product", "subtitle", "text");
+        MetaData metaData = new MetaData("IDw","page_title","site name","description","keywords", "//canonical//");
+        PricingInformation pricingInformation = new PricingInformation("IDw", new BigDecimal("20.00"),new BigDecimal("10.00"), new BigDecimal("20.00") );
+        ProductDescription productDescription = new ProductDescription("IDw","title product", "subtitle", "text");
 
-        Product product = new Product("name","Number", "product type",metaData, pricingInformation, productDescription);
+        Product product = new Product("IDw", "name","Number", "product type",metaData, pricingInformation, productDescription);
         Product result = productRepository.save(product);
         Assert.assertFalse(result == null);
     }

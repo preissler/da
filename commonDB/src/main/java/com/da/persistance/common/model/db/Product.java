@@ -1,29 +1,29 @@
-package com.da.persistance.model.db;
+package com.da.persistance.common.model.db;
 
-
-
-import javax.persistence.*;
-import java.util.UUID;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Product {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private UUID id;
+    private String id;
     private String name;
     private String model_number;
     private String product_type;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private MetaData metaData;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private PricingInformation pricing_information;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private ProductDescription product_description;
 
-    public Product() {
-    }
+    public Product(){}
 
-    public Product(String name, String model_number, String product_type, MetaData metaData, PricingInformation pricing_information, ProductDescription product_description) {
+    public Product(String id, String name, String model_number, String product_type, MetaData metaData,
+                   PricingInformation pricing_information, ProductDescription product_description) {
+        this.id=id;
         this.name = name;
         this.model_number = model_number;
         this.product_type = product_type;
@@ -32,7 +32,8 @@ public class Product {
         this.product_description = product_description;
     }
 
-    public UUID getId() {
+
+    public String getId() {
         return id;
     }
 
@@ -58,6 +59,10 @@ public class Product {
 
     public ProductDescription getProduct_description() {
         return product_description;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setName(String name) {

@@ -1,26 +1,20 @@
-package com.da.persistance.model.db;
+package com.da.persistance.common.model.db;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.UUID;
 
 @Entity
 public class MetaData {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private UUID id;
+    private String id;
     private String page_title;
     private String site_name;
     private String description;
     private String keywords;
     private String canonical;
 
-    public MetaData() {
-    }
-
-    public MetaData(String page_title, String site_name, String description, String keywords, String canonical) {
+    public MetaData(String id, String page_title, String site_name, String description, String keywords, String canonical) {
+        this.id=id;
         this.page_title = page_title;
         this.site_name = site_name;
         this.description = description;
@@ -28,7 +22,10 @@ public class MetaData {
         this.canonical = canonical;
     }
 
-    public UUID getId() {
+    public MetaData() {
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -50,6 +47,10 @@ public class MetaData {
 
     public String getCanonical() {
         return canonical;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setPage_title(String page_title) {

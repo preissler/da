@@ -3,11 +3,12 @@ package com.da.persistance.transformer;
 
 import com.da.common.model.json.ProductJSON;
 
-import com.da.persistance.model.db.MetaData;
-import com.da.persistance.model.db.PricingInformation;
-import com.da.persistance.model.db.Product;
-import com.da.persistance.model.db.ProductDescription;
-import com.da.persistance.repository.ProductRepository;
+
+import com.da.persistance.common.model.db.MetaData;
+import com.da.persistance.common.model.db.PricingInformation;
+import com.da.persistance.common.model.db.Product;
+import com.da.persistance.common.model.db.ProductDescription;
+import com.da.persistance.common.repository.ProductRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,13 +29,13 @@ public class PoductJSONTests {
     private ProductTransformer productTransformer;
     @Test
     public void testTransformToJSON() throws Exception{
-        MetaData metaData = new MetaData("page_title","site name","description","keywords", "//canonical//");
-        PricingInformation pricingInformation = new PricingInformation(new BigDecimal("20.00"),new BigDecimal("10.00"), new BigDecimal("20.00") );
-        ProductDescription productDescription = new ProductDescription("title product", "subtitle", "text");
-        Product product = new Product("name","Number", "product type",metaData, pricingInformation, productDescription);
+        MetaData metaData = new MetaData("ID","page_title","site name","description","keywords", "//canonical//");
+        PricingInformation pricingInformation = new PricingInformation("ID", new BigDecimal("20.00"),new BigDecimal("10.00"), new BigDecimal("20.00") );
+        ProductDescription productDescription = new ProductDescription("ID", "title product", "subtitle", "text");
+        Product product = new Product("ID", "name","Number", "product type",metaData, pricingInformation, productDescription);
         Product result = productRepository.save(product);
         ProductJSON productJSON = productTransformer.toProductJSON(result);
-        Assert.assertEquals(productJSON.getId(), result.getId().toString());
+        Assert.assertEquals(productJSON.getId(), result.getId());
         Assert.assertFalse(productJSON.getId() ==null);
         Assert.assertEquals(productJSON.getName(), result.getName());
         Assert.assertFalse(productJSON.getName() == null);
