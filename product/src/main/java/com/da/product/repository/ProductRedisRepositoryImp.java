@@ -1,4 +1,4 @@
-package com.da.persistance.repository;
+package com.da.product.repository;
 
 import com.da.common.model.json.ProductJSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ public class ProductRedisRepositoryImp implements ProductRedisRepository {
     private static String PROD ="PRODUCT";
     @Autowired
     private RedisTemplate<String, ProductJSON> redisTemplate;
-    //private HashOperations hashOperations;
 
     @Autowired
     HashOperations<String, String, ProductJSON> hashOperations;
@@ -23,11 +22,6 @@ public class ProductRedisRepositoryImp implements ProductRedisRepository {
         hashOperations = redisTemplate.opsForHash();
     }
 
-    @Override
-    public void save(ProductJSON productJSON) {
-        hashOperations.put(PROD,productJSON.getId(), productJSON);
-
-    }
 
     @Override
     public Map<String, ProductJSON> findAll() {
@@ -39,8 +33,5 @@ public class ProductRedisRepositoryImp implements ProductRedisRepository {
         return (ProductJSON)hashOperations.get(PROD,id);
     }
 
-    @Override
-    public void update(ProductJSON productJSON) {
-        save(productJSON);
-    }
+
 }

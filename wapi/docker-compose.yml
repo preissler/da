@@ -1,0 +1,4 @@
+wapi:
+  image: da/wapi:latest
+  ports:
+    - "8081:8080"

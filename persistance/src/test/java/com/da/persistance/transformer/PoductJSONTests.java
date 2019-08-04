@@ -68,4 +68,6 @@ public class PoductJSONTests {
         Assert.assertEquals(productJSON.getProduct_description().getTitle(), result.getProduct_description().getTitle());
         Assert.assertFalse(productJSON.getProduct_description().getTitle()== null);
     }
+
+
 }

@@ -1,10 +1,6 @@
 package com.da.persistance.queue;
 
-
-
 import com.da.common.model.json.ProductJSON;
-
-
 import com.da.persistance.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;

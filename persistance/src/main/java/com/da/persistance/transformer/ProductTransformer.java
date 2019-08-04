@@ -1,14 +1,9 @@
 package com.da.persistance.transformer;
 
-
-
-
 import com.da.common.model.json.MetaDataJSON;
 import com.da.common.model.json.PricingInformationJSON;
 import com.da.common.model.json.ProductDescriptionJSON;
 import com.da.common.model.json.ProductJSON;
-
-
 import com.da.persistance.common.model.db.MetaData;
 import com.da.persistance.common.model.db.PricingInformation;
 import com.da.persistance.common.model.db.Product;
