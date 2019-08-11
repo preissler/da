@@ -1,5 +1,7 @@
 package com.da.persistence.pagination;
 
+import com.da.common.model.json.ProductJSON;
+import com.da.persistence.OauthHelper;
 import com.da.persistence.common.model.redis.MetaDataRedis;
 import com.da.persistence.common.model.redis.PricingInformationRedis;
 import com.da.persistence.common.model.redis.ProductDescriptionRedis;
@@ -15,8 +17,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -27,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PaginationTests {
+public class PaginationTests extends OauthHelper {
 
     @LocalServerPort
     public int port;
@@ -105,7 +106,12 @@ public class PaginationTests {
 
 
         Mockito.when(redisRepository.findAll(Mockito.any(Pageable.class))).thenReturn(page);
-        ResponseEntity<String> entity = restTemplate.getForEntity(getProducts+"?page=0&size=3", String.class);
+
+        HttpHeaders headers = new HttpHeaders();
+        String tokenValue = obtainAccessToken("clientId", "user", "pass");
+        headers.add("Authorization","Bearer "+tokenValue);
+        HttpEntity<ProductJSON> req = new HttpEntity<>(headers);
+        ResponseEntity<String> entity = restTemplate.exchange( getProducts+"?page=0&size=3", HttpMethod.GET, req, String.class);
         System.out.println(entity.getBody());
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
@@ -122,7 +128,13 @@ public class PaginationTests {
         Mockito.when(page.iterator()).thenReturn(secondPageRedisPropertis().iterator());
 
         Mockito.when(redisRepository.findAll(Mockito.any(Pageable.class))).thenReturn(page);
-        ResponseEntity<String> entity = restTemplate.getForEntity(getProducts+"?page=1&size=3", String.class);
+
+
+        HttpHeaders headers = new HttpHeaders();
+        String tokenValue = obtainAccessToken("clientId", "user", "pass");
+        headers.add("Authorization","Bearer "+tokenValue);
+        HttpEntity<ProductJSON> req = new HttpEntity<>(headers);
+        ResponseEntity<String> entity = restTemplate.exchange( getProducts+"?page=1&size=3", HttpMethod.GET, req, String.class);
         System.out.println(entity.getBody());
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }

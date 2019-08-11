@@ -1,5 +1,7 @@
 package com.da.persistence.exception;
 
+import com.da.common.model.json.ProductJSON;
+import com.da.persistence.OauthHelper;
 import com.da.persistence.common.model.redis.MetaDataRedis;
 import com.da.persistence.common.model.redis.PricingInformationRedis;
 import com.da.persistence.common.model.redis.ProductDescriptionRedis;
@@ -17,8 +19,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -29,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ControllerTests {
+public class ControllerTests extends OauthHelper {
     @LocalServerPort
     public int port;
     @Autowired
@@ -57,7 +58,11 @@ public class ControllerTests {
     @Test
     public void getOk(){
         Mockito.when(redisRepository.findAll(Mockito.any(Pageable.class))).thenReturn(Page.empty());
-        ResponseEntity<String> entity = restTemplate.getForEntity(getProducts, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        String tokenValue = obtainAccessToken("clientId", "user", "pass");
+        headers.add("Authorization","Bearer "+tokenValue);
+        HttpEntity<ProductJSON> req = new HttpEntity<>(headers);
+        ResponseEntity<String> entity = restTemplate.exchange( getProducts, HttpMethod.GET, req, String.class);
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
 
@@ -76,14 +81,22 @@ public class ControllerTests {
                     }
                 });
 
-        ResponseEntity<String> entity = restTemplate.getForEntity(getProducts, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        String tokenValue = obtainAccessToken("clientId", "user", "pass");
+        headers.add("Authorization","Bearer "+tokenValue);
+        HttpEntity<ProductJSON> req = new HttpEntity<>(headers);
+        ResponseEntity<String> entity = restTemplate.exchange( getProducts, HttpMethod.GET, req, String.class);
         assertEquals(HttpStatus.REQUEST_TIMEOUT, entity.getStatusCode());
     }
 
     @Test
     public void internalError(){
         Mockito.when(redisRepository.findAll(Mockito.any(Pageable.class))).thenReturn(null);
-        ResponseEntity<String> entity = restTemplate.getForEntity(getProducts, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        String tokenValue = obtainAccessToken("clientId", "user", "pass");
+        headers.add("Authorization","Bearer "+tokenValue);
+        HttpEntity<ProductJSON> req = new HttpEntity<>(headers);
+        ResponseEntity<String> entity = restTemplate.exchange( getProducts, HttpMethod.GET, req, String.class);
         System.out.println(entity.getBody());
         String error = "{\"message\":\"Internal Error\",\"statusCode\":500,\"errorMessageCode\":\"E003\"}";
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, entity.getStatusCode());
@@ -100,7 +113,11 @@ public class ControllerTests {
         Mockito.when(page.spliterator()).thenReturn(firstPageRedisPropertis().spliterator());
         Mockito.when(page.iterator()).thenReturn(firstPageRedisPropertis().iterator());
 
-        ResponseEntity<String> entity = restTemplate.getForEntity(getProducts, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        String tokenValue = obtainAccessToken("clientId", "user", "pass");
+        headers.add("Authorization","Bearer "+tokenValue);
+        HttpEntity<ProductJSON> req = new HttpEntity<>(headers);
+        ResponseEntity<String> entity = restTemplate.exchange( getProducts, HttpMethod.GET, req, String.class);
         System.out.println(entity.getBody());
         String error = "{\"message\":\"Internal Error\",\"statusCode\":500,\"errorMessageCode\":\"E003\"}";
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, entity.getStatusCode());

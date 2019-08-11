@@ -26,7 +26,7 @@ public class ProductApplicationTests {
 	public void contextLoads() throws Exception {
 		ResponseEntity<String> entity = restTemplate
 				.getForEntity("http://localhost:" + this.port + "/", String.class);
-		assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+		assertEquals(HttpStatus.UNAUTHORIZED, entity.getStatusCode());
 	}
 
 }
