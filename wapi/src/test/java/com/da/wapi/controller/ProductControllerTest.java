@@ -76,21 +76,6 @@ public class ProductControllerTest extends OauthHelper {
 
 
 
-  /*  @WithMockUser
-    @Test
-    public void shouldAllowAnyAuthenticatedUser() throws Exception {
-        MvcResult result = mockMvc.perform(post(productUpdateURL)).andReturn();
-        System.out.println(result.getResponse().getStatus());
-    }
-
-    @Test
-    @WithMockUser
-    public void shouldAllowAnyAuthenticatedUser1() throws Exception {
-         mockMvc.perform(post(productUpdateURL).contentType(MediaType.APPLICATION_JSON)
-                .content(fakeRequest().toString()).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
-    }*/
-
     @Test
     public void testForbidden() throws Exception{
         ProductJSON product = fakeRequest();
