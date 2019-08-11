@@ -1,7 +1,8 @@
 package com.da.wapi.configuration;
 
+import com.da.common.model.json.ErrorJSON;
 import com.da.wapi.exception.*;
-import com.da.wapi.model.ErrorJSON;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,13 +43,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     protected ResponseEntity<Object> requestWithPriceZeroOrNegative(PriceIsZeroOrNegativeError ex,  WebRequest request){
         ErrorJSON errorJSON = new ErrorJSON(ex.getMessage(),
                 HttpStatus.BAD_REQUEST.value(), "E004");
-        return handleExceptionInternal(ex, errorJSON,
-                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
-    @ExceptionHandler(value = WrongIdFormatError.class)
-    protected ResponseEntity<Object> requestWithWrongIdFormat(WrongIdFormatError ex,  WebRequest request){
-        ErrorJSON errorJSON = new ErrorJSON(ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), "E005");
         return handleExceptionInternal(ex, errorJSON,
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }

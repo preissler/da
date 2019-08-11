@@ -6,7 +6,6 @@ import com.da.common.model.json.ProductDescriptionJSON;
 import com.da.common.model.json.ProductJSON;
 import com.da.wapi.exception.EmptyFieldError;
 import com.da.wapi.exception.PriceIsZeroOrNegativeError;
-import com.da.wapi.exception.WrongIdFormatError;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -280,10 +279,10 @@ public class RequestValidationTests {
         requestValidator.validateFields(productJSON);
     }
 
-    @Test(expected = WrongIdFormatError.class)
+    @Test(expected = EmptyFieldError.class)
     public void idIsNotUUID(){
         ProductJSON productJSON = getProduct();
-        productJSON.setId("12232");
+        productJSON.setId(null);
         requestValidator.validateFields(productJSON);
     }
 

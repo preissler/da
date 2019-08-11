@@ -1,0 +1,4 @@
+persistance:
+  image: da/persistance:latest
+  ports:
+    - "8082:8080"
