@@ -5,7 +5,7 @@ import com.da.common.model.json.MetaDataJSON;
 import com.da.common.model.json.PricingInformationJSON;
 import com.da.common.model.json.ProductDescriptionJSON;
 import com.da.common.model.json.ProductJSON;
-import org.junit.Before;
+import com.da.wapi.OauthHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -16,27 +16,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class ProductControllerTest {
+public class ProductControllerTest extends OauthHelper {
+
+
     @LocalServerPort
     public int port;
     @Autowired
@@ -45,28 +42,11 @@ public class ProductControllerTest {
 
 
 
-
    @MockBean
    RabbitAdmin rabbitAdmin;
    @MockBean
    RabbitTemplate rabbitTemplate;
 
-
-    MockMvc mockMvc;
-
-    @Autowired
-    WebApplicationContext context;
-
-
-    @Autowired
-    FilterChainProxy springSecurityFilterChain;
-
-
-
-    @Before
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).addFilters(springSecurityFilterChain).build();
-    }
 
 
 
@@ -95,8 +75,9 @@ public class ProductControllerTest {
     }
 
 
+
+  /*  @WithMockUser
     @Test
-    @WithMockUser
     public void shouldAllowAnyAuthenticatedUser() throws Exception {
         MvcResult result = mockMvc.perform(post(productUpdateURL)).andReturn();
         System.out.println(result.getResponse().getStatus());
@@ -108,41 +89,50 @@ public class ProductControllerTest {
          mockMvc.perform(post(productUpdateURL).contentType(MediaType.APPLICATION_JSON)
                 .content(fakeRequest().toString()).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
-    }
+    }*/
 
     @Test
     public void testForbidden() throws Exception{
         ProductJSON product = fakeRequest();
         ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, product, String.class);
         System.out.println(entity.getBody());
-        assertEquals(HttpStatus.FORBIDDEN, entity.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, entity.getStatusCode());
     }
 
     @Test
-    @WithMockUser
     public void getOk() throws Exception{
         ProductJSON product = fakeRequest();
-        ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, product, String.class);
+        String tokenValue = obtainAccessToken("clientId", "user", "pass");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization","Bearer "+tokenValue);
+        HttpEntity<ProductJSON > req = new HttpEntity<>(product, headers);
+        ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, req, String.class);
         System.out.println(entity.getBody());
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
 
     @Test
-    @WithMockUser
     public void getValidationError ()throws Exception{
         ProductJSON product = fakeRequest();
         product.setId(null);
-        ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, product, String.class);
+        String tokenValue = obtainAccessToken("clientId", "user", "pass");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization","Bearer "+tokenValue);
+        HttpEntity<ProductJSON > req = new HttpEntity<>(product, headers);
+        ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, req, String.class);
         assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
         String exp = "{\"message\":\"Product ID is null\",\"statusCode\":400,\"errorMessageCode\":\"E003\"}";
         assertEquals(exp, entity.getBody());
     }
 
-    @WithMockUser("spring")
     @Test
     public void negativePrice() throws Exception{
         ProductJSON product = fakeRequestNegative();
-        ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, product, String.class);
+        String tokenValue = obtainAccessToken("clientId", "user", "pass");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization","Bearer "+tokenValue);
+        HttpEntity<ProductJSON > req = new HttpEntity<>(product, headers);
+        ResponseEntity<String> entity = restTemplate.postForEntity(productUpdateURL, req, String.class);
         assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
         String exp = "{\"message\":\"Standard Price No Vat is Negative\",\"statusCode\":400,\"errorMessageCode\":\"E004\"}";
         assertEquals(exp, entity.getBody());
